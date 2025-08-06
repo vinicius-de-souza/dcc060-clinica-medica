@@ -11,7 +11,19 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(helmet());
-app.use(cors());
+
+// CORS configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:8080',
+    'http://127.0.0.1:8080',
+    'https://dcc060-clinica-medica-front.onrender.com'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
