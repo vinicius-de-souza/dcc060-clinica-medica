@@ -9,10 +9,10 @@ const pacienteRoutes = require('./routes/pacienteRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Middlewares
 app.use(helmet());
 
-// CORS configuration
+// Configuração do CORS
 const corsOptions = {
   origin: [
     'http://localhost:8080',
@@ -27,10 +27,10 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Rotas
 app.use('/api/pacientes', pacienteRoutes);
 
-// Swagger documentation
+// Documentação do Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
   explorer: true,
   customCss: '.swagger-ui .topbar { display: none }',
@@ -59,12 +59,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
  *                   type: string
  *                   example: API is running
  */
-// Health check endpoint
+// Endpoint de verificação de saúde
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'API is running' });
 });
 
-// Error handling middleware
+// Middleware de tratamento de erros
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });

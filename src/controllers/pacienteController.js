@@ -1,6 +1,6 @@
 const db = require('../config/database');
 
-// Helper function to get patient by ID
+// Função auxiliar para buscar paciente por ID
 const getPacienteByIdInternal = async (id) => {
   const query = `
     SELECT 
@@ -23,7 +23,7 @@ const getPacienteByIdInternal = async (id) => {
   return result.rows.length > 0 ? result.rows[0] : null;
 };
 
-// GET /api/pacientes - List all patients
+// GET /api/pacientes - Lista todos os pacientes
 const getAllPacientes = async (req, res) => {
   try {
     const query = `
@@ -46,12 +46,12 @@ const getAllPacientes = async (req, res) => {
     const result = await db.query(query);
     res.json(result.rows);
   } catch (error) {
-    console.error('Error fetching patients:', error);
-    res.status(500).json({ error: 'Failed to fetch patients' });
+    console.error('Erro ao buscar pacientes:', error);
+    res.status(500).json({ error: 'Falha ao buscar pacientes' });
   }
 };
 
-// GET /api/pacientes/:id - Get patient by ID
+// GET /api/pacientes/:id - Busca paciente por ID
 const getPacienteById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -59,42 +59,42 @@ const getPacienteById = async (req, res) => {
     const patient = await getPacienteByIdInternal(id);
     
     if (!patient) {
-      return res.status(404).json({ error: 'Patient not found' });
+      return res.status(404).json({ error: 'Paciente não encontrado' });
     }
     
     res.json(patient);
   } catch (error) {
-    console.error('Error fetching patient:', error);
-    res.status(500).json({ error: 'Failed to fetch patient' });
+    console.error('Erro ao buscar paciente:', error);
+    res.status(500).json({ error: 'Falha ao buscar paciente' });
   }
 };
 
-// POST /api/pacientes - Create new patient
+// POST /api/pacientes - Cria um novo paciente
 const createPaciente = async (req, res) => {
   try {
     const { nome, cpf, telefone, email, endereco, data_nascimento, id_convenio } = req.body;
     
-    // Validate required fields
+    // Valida os campos obrigatórios
     if (!nome || !cpf || !data_nascimento) {
-      return res.status(400).json({ error: 'Nome, CPF and data_nascimento are required' });
+      return res.status(400).json({ error: 'Nome, CPF e data_nascimento são obrigatórios' });
     }
 
-    // Start transaction
+    // Inicia a transação
     await db.query('BEGIN');
     
     try {
-      // Get next ID for Pessoa
+      // Obtém o próximo ID para Pessoa
       const personIdResult = await db.query('SELECT COALESCE(MAX(id_pessoa), 0) + 1 as next_id FROM Pessoa');
       const nextPersonId = personIdResult.rows[0].next_id;
       
-      // Insert into Pessoa table
+      // Insere na tabela Pessoa
       const insertPersonQuery = `
         INSERT INTO Pessoa (id_pessoa, nome, cpf, telefone, email, endereco)
         VALUES ($1, $2, $3, $4, $5, $6)
       `;
       await db.query(insertPersonQuery, [nextPersonId, nome, cpf, telefone, email, endereco]);
       
-      // Insert into Paciente table
+      // Insere na tabela Paciente
       const insertPatientQuery = `
         INSERT INTO Paciente (id_paciente, data_nascimento, id_convenio)
         VALUES ($1, $2, $3)
@@ -103,7 +103,7 @@ const createPaciente = async (req, res) => {
       
       await db.query('COMMIT');
       
-      // Return the created patient
+      // Retorna o paciente criado
       const createdPatient = await getPacienteByIdInternal(nextPersonId);
       res.status(201).json(createdPatient);
       
@@ -113,33 +113,33 @@ const createPaciente = async (req, res) => {
     }
     
   } catch (error) {
-    console.error('Error creating patient:', error);
+    console.error('Erro ao criar paciente:', error);
     
-    if (error.code === '23505') { // Unique constraint violation
-      return res.status(400).json({ error: 'CPF already exists' });
+    if (error.code === '23505') { // Violação de restrição única
+      return res.status(400).json({ error: 'CPF já existe' });
     }
     
-    res.status(500).json({ error: 'Failed to create patient' });
+    res.status(500).json({ error: 'Falha ao criar paciente' });
   }
 };
 
-// PUT /api/pacientes/:id - Update patient
+// PUT /api/pacientes/:id - Atualiza um paciente
 const updatePaciente = async (req, res) => {
   try {
     const { id } = req.params;
     const { nome, cpf, telefone, email, endereco, data_nascimento, id_convenio } = req.body;
     
-    // Check if patient exists
+    // Verifica se o paciente existe
     const existingPatient = await getPacienteByIdInternal(id);
     if (!existingPatient) {
-      return res.status(404).json({ error: 'Patient not found' });
+      return res.status(404).json({ error: 'Paciente não encontrado' });
     }
     
-    // Start transaction
+    // Inicia a transação
     await db.query('BEGIN');
     
     try {
-      // Update Pessoa table
+      // Atualiza a tabela Pessoa
       const updatePersonQuery = `
         UPDATE Pessoa 
         SET nome = $1, cpf = $2, telefone = $3, email = $4, endereco = $5
@@ -147,7 +147,7 @@ const updatePaciente = async (req, res) => {
       `;
       await db.query(updatePersonQuery, [nome, cpf, telefone, email, endereco, id]);
       
-      // Update Paciente table
+      // Atualiza a tabela Paciente
       const updatePatientQuery = `
         UPDATE Paciente 
         SET data_nascimento = $1, id_convenio = $2
@@ -157,7 +157,7 @@ const updatePaciente = async (req, res) => {
       
       await db.query('COMMIT');
       
-      // Return the updated patient
+      // Retorna o paciente atualizado
       const updatedPatient = await getPacienteByIdInternal(id);
       res.json(updatedPatient);
       
@@ -167,35 +167,35 @@ const updatePaciente = async (req, res) => {
     }
     
   } catch (error) {
-    console.error('Error updating patient:', error);
+    console.error('Erro ao atualizar paciente:', error);
     
-    if (error.code === '23505') { // Unique constraint violation
-      return res.status(400).json({ error: 'CPF already exists' });
+    if (error.code === '23505') { // Violação de restrição única
+      return res.status(400).json({ error: 'CPF já existe' });
     }
     
-    res.status(500).json({ error: 'Failed to update patient' });
+    res.status(500).json({ error: 'Falha ao atualizar paciente' });
   }
 };
 
-// DELETE /api/pacientes/:id - Delete patient
+// DELETE /api/pacientes/:id - Deleta um paciente
 const deletePaciente = async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Check if patient exists
+    // Verifica se o paciente existe
     const existingPatient = await getPacienteByIdInternal(id);
     if (!existingPatient) {
-      return res.status(404).json({ error: 'Patient not found' });
+      return res.status(404).json({ error: 'Paciente não encontrado' });
     }
     
-    // Start transaction
+    // Inicia a transação
     await db.query('BEGIN');
     
     try {
-      // Delete from Paciente table first (due to foreign key)
+      // Deleta da tabela Paciente primeiro (devido à chave estrangeira)
       await db.query('DELETE FROM Paciente WHERE id_paciente = $1', [id]);
       
-      // Delete from Pessoa table
+      // Deleta da tabela Pessoa
       await db.query('DELETE FROM Pessoa WHERE id_pessoa = $1', [id]);
       
       await db.query('COMMIT');
@@ -208,13 +208,13 @@ const deletePaciente = async (req, res) => {
     }
     
   } catch (error) {
-    console.error('Error deleting patient:', error);
+    console.error('Erro ao deletar paciente:', error);
     
-    if (error.code === '23503') { // Foreign key constraint violation
-      return res.status(400).json({ error: 'Cannot delete patient with existing consultations' });
+    if (error.code === '23503') { // Violação de restrição de chave estrangeira
+      return res.status(400).json({ error: 'Não é possível deletar paciente com consultas existentes' });
     }
     
-    res.status(500).json({ error: 'Failed to delete patient' });
+    res.status(500).json({ error: 'Falha ao deletar paciente' });
   }
 };
 

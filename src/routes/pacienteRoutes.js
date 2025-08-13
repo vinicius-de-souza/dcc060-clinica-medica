@@ -13,19 +13,19 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Pacientes
- *   description: Patient management endpoints
+ *   description: Endpoints para gerenciamento de pacientes
  */
 
 /**
  * @swagger
  * /api/pacientes:
  *   get:
- *     summary: Get all patients
- *     description: Retrieve a list of all patients with their personal information and health insurance details
+ *     summary: Busca todos os pacientes
+ *     description: Retorna uma lista de todos os pacientes com suas informações pessoais e detalhes do convênio
  *     tags: [Pacientes]
  *     responses:
  *       200:
- *         description: List of patients retrieved successfully
+ *         description: Lista de pacientes retornada com sucesso
  *         content:
  *           application/json:
  *             schema:
@@ -33,59 +33,59 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Paciente'
  *       500:
- *         description: Internal server error
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-// GET /api/pacientes - List all patients
+// GET /api/pacientes - Lista todos os pacientes
 router.get('/', getAllPacientes);
 
 /**
  * @swagger
  * /api/pacientes/{id}:
  *   get:
- *     summary: Get patient by ID
- *     description: Retrieve a specific patient by their ID
+ *     summary: Busca um paciente por ID
+ *     description: Retorna um paciente específico pelo seu ID
  *     tags: [Pacientes]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: Patient ID
+ *         description: ID do Paciente
  *         schema:
  *           type: integer
  *           example: 1
  *     responses:
  *       200:
- *         description: Patient retrieved successfully
+ *         description: Paciente retornado com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Paciente'
  *       404:
- *         description: Patient not found
+ *         description: Paciente não encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Internal server error
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-// GET /api/pacientes/:id - Get patient by ID
+// GET /api/pacientes/:id - Busca paciente por ID
 router.get('/:id', getPacienteById);
 
 /**
  * @swagger
  * /api/pacientes:
  *   post:
- *     summary: Create a new patient
- *     description: Create a new patient with personal information and optional health insurance
+ *     summary: Cria um novo paciente
+ *     description: Cria um novo paciente com informações pessoais e convênio opcional
  *     tags: [Pacientes]
  *     requestBody:
  *       required: true
@@ -103,39 +103,39 @@ router.get('/:id', getPacienteById);
  *             id_convenio: 1
  *     responses:
  *       201:
- *         description: Patient created successfully
+ *         description: Paciente criado com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Paciente'
  *       400:
- *         description: Bad request - Invalid input data or CPF already exists
+ *         description: Requisição inválida - Dados de entrada inválidos ou CPF já existe
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Internal server error
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-// POST /api/pacientes - Create new patient
+// POST /api/pacientes - Cria um novo paciente
 router.post('/', createPaciente);
 
 /**
  * @swagger
  * /api/pacientes/{id}:
  *   put:
- *     summary: Update an existing patient
- *     description: Update patient information by ID
+ *     summary: Atualiza um paciente existente
+ *     description: Atualiza as informações de um paciente pelo ID
  *     tags: [Pacientes]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: Patient ID
+ *         description: ID do Paciente
  *         schema:
  *           type: integer
  *           example: 1
@@ -155,71 +155,71 @@ router.post('/', createPaciente);
  *             id_convenio: 2
  *     responses:
  *       200:
- *         description: Patient updated successfully
+ *         description: Paciente atualizado com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Paciente'
  *       400:
- *         description: Bad request - Invalid input data or CPF already exists
+ *         description: Requisição inválida - Dados de entrada inválidos ou CPF já existe
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       404:
- *         description: Patient not found
+ *         description: Paciente não encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Internal server error
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-// PUT /api/pacientes/:id - Update patient
+// PUT /api/pacientes/:id - Atualiza um paciente
 router.put('/:id', updatePaciente);
 
 /**
  * @swagger
  * /api/pacientes/{id}:
  *   delete:
- *     summary: Delete a patient
- *     description: Delete a patient by ID. Cannot delete patients with existing consultations.
+ *     summary: Deleta um paciente
+ *     description: Deleta um paciente por ID. Não é possível deletar pacientes com consultas existentes.
  *     tags: [Pacientes]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: Patient ID
+ *         description: ID do Paciente
  *         schema:
  *           type: integer
  *           example: 1
  *     responses:
  *       204:
- *         description: Patient deleted successfully
+ *         description: Paciente deletado com sucesso
  *       400:
- *         description: Bad request - Cannot delete patient with existing consultations
+ *         description: Requisição inválida - Não é possível deletar paciente com consultas existentes
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       404:
- *         description: Patient not found
+ *         description: Paciente não encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Internal server error
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-// DELETE /api/pacientes/:id - Delete patient
+// DELETE /api/pacientes/:id - Deleta um paciente
 router.delete('/:id', deletePaciente);
 
 module.exports = router;

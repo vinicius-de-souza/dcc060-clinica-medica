@@ -5,18 +5,18 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Medical Clinic Management System API',
+      title: 'API do Sistema de Gestão de Clínica Médica',
       version: '1.0.0',
-      description: 'A simple and straightforward API for managing a medical clinic',
+      description: 'Uma API simples e direta para gerenciar uma clínica médica',
       contact: {
-        name: 'API Support',
+        name: 'Suporte da API',
         email: 'support@clinica-medica.com'
       }
     },
     servers: [
       {
         url: `http://localhost:${process.env.PORT || 3000}`,
-        description: 'Development server'
+        description: 'Servidor de desenvolvimento'
       }
     ],
     components: {
@@ -26,49 +26,49 @@ const options = {
           properties: {
             id_pessoa: {
               type: 'integer',
-              description: 'Patient ID (auto-generated)',
+              description: 'ID do paciente (gerado automaticamente)',
               example: 1
             },
             nome: {
               type: 'string',
-              description: 'Patient full name',
+              description: 'Nome completo do paciente',
               example: 'João Silva'
             },
             cpf: {
               type: 'string',
-              description: 'Patient CPF (Brazilian ID)',
+              description: 'CPF do paciente',
               example: '123.456.789-00'
             },
             telefone: {
               type: 'string',
-              description: 'Patient phone number',
+              description: 'Número de telefone do paciente',
               example: '(11) 99999-9999'
             },
             email: {
               type: 'string',
               format: 'email',
-              description: 'Patient email address',
+              description: 'Endereço de e-mail do paciente',
               example: 'joao@email.com'
             },
             endereco: {
               type: 'string',
-              description: 'Patient address',
+              description: 'Endereço do paciente',
               example: 'Rua das Flores, 123'
             },
             data_nascimento: {
               type: 'string',
               format: 'date',
-              description: 'Patient birth date',
+              description: 'Data de nascimento do paciente',
               example: '1990-01-15'
             },
             id_convenio: {
               type: 'integer',
-              description: 'Health insurance ID (optional)',
+              description: 'ID do convênio (opcional)',
               example: 1
             },
             convenio_nome: {
               type: 'string',
-              description: 'Health insurance name',
+              description: 'Nome do convênio',
               example: 'Unimed'
             }
           },
@@ -79,39 +79,39 @@ const options = {
           properties: {
             nome: {
               type: 'string',
-              description: 'Patient full name',
+              description: 'Nome completo do paciente',
               example: 'João Silva'
             },
             cpf: {
               type: 'string',
-              description: 'Patient CPF (Brazilian ID)',
+              description: 'CPF do paciente',
               example: '123.456.789-00'
             },
             telefone: {
               type: 'string',
-              description: 'Patient phone number',
+              description: 'Número de telefone do paciente',
               example: '(11) 99999-9999'
             },
             email: {
               type: 'string',
               format: 'email',
-              description: 'Patient email address',
+              description: 'Endereço de e-mail do paciente',
               example: 'joao@email.com'
             },
             endereco: {
               type: 'string',
-              description: 'Patient address',
+              description: 'Endereço do paciente',
               example: 'Rua das Flores, 123'
             },
             data_nascimento: {
               type: 'string',
               format: 'date',
-              description: 'Patient birth date',
+              description: 'Data de nascimento do paciente',
               example: '1990-01-15'
             },
             id_convenio: {
               type: 'integer',
-              description: 'Health insurance ID (optional)',
+              description: 'ID do convênio (opcional)',
               example: 1
             }
           },
@@ -122,8 +122,8 @@ const options = {
           properties: {
             error: {
               type: 'string',
-              description: 'Error message',
-              example: 'Patient not found'
+              description: 'Mensagem de erro',
+              example: 'Paciente não encontrado'
             }
           }
         }
